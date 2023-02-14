@@ -1,0 +1,10 @@
+.joditeditor{
+    font-size:x-large;
+    font-family: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+    font-weight: 500;
+}
+
+.chakra-react-select__menu-portal {
+    z-index: 1000;
+    background: #1a202c;
+}
