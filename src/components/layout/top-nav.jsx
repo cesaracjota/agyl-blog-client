@@ -45,20 +45,20 @@ const Topnav = (props) => {
 
     const [user_detail, setUserDetail] = useState([]);
 
-    if (user) {
-        dispatch(getUser(user?.data?._id)).then((res) => {
-            setUserDetail(res?.payload)
-        })
-    }
+    
+    useEffect(() => {
+        
+        if (user) {
+            dispatch(getUser(user?.data?._id)).then((res) => {
+                setUserDetail(res?.payload)
+            })
+        }
+        
+        return () => {
+            dispatch(reset())
+        }
 
-    // useEffect(() => {
-
-
-    //     return () => {
-    //         dispatch(reset())
-    //     }
-
-    // }, [dispatch, user]);
+    }, [dispatch, user]);
 
     return (
         <>
