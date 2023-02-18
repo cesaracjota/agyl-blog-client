@@ -29,9 +29,9 @@ export const getAllUsers = createAsyncThunk(
 
 export const getUser = createAsyncThunk(
     "user/get",
-    async (id, thunkAPI) => {
+    async (username, thunkAPI) => {
         try {
-            return await userService.GET(id);
+            return await userService.GET(username);
         } catch (error) {
             const message = 
             (error.response && 

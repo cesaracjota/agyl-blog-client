@@ -49,7 +49,7 @@ const Topnav = (props) => {
     useEffect(() => {
         
         if (user) {
-            dispatch(getUser(user?.data?._id)).then((res) => {
+            dispatch(getUser(user?.data?.username)).then((res) => {
                 setUserDetail(res?.payload)
             })
         }

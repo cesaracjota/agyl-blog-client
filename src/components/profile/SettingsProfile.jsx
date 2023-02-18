@@ -62,7 +62,7 @@ const SettingsProfile = () => {
 
   useEffect(() => {
 
-    dispatch(getUser(user?.data?._id)).then((res) => {
+    dispatch(getUser(user?.data?.username)).then((res) => {
       setIndice(res.payload);
     });
 
@@ -70,7 +70,7 @@ const SettingsProfile = () => {
       dispatch(reset())
     }
 
-  }, [navigate, dispatch, user?.data?._id]);
+  }, [navigate, dispatch, user?.data?.username]);
 
   if (isError) {
     ToastChakra('Error', message, 'error', 1000);

@@ -8,9 +8,9 @@ const GETALL = async () => {
     return response.data;
 }
 
-const GET = async (id) => {
-    const response = await axios.get(`${API_URL}/posts/${id}`);
-    return response.data;
+const GET = async (slug) => {
+    const response = await axios.get(`${API_URL}/posts/${slug}`);
+    return response.data.data;
 }
 
 const CREATE = async (data, token) => {

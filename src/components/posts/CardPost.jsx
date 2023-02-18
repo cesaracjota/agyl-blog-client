@@ -36,9 +36,8 @@ const CardPost = ({ post }) => {
                         <Stack spacing={4} direction={'row'}>
                             <Link
                                 to={{
-                                    pathname: `/a/${post?.author?.username && post?.author?.username?.replace(/ /g, '-')}/`,
+                                    pathname: `/a/${post?.author?.username}`,
                                 }}
-                                state={{ id: post?.author?._id }}
                             >
                                 <Avatar
                                     borderWidth={'3px'}
@@ -51,9 +50,8 @@ const CardPost = ({ post }) => {
                             <Stack spacing={0} direction="column" alignSelf={'center'}>
                                 <Link
                                     to={{
-                                        pathname: `/a/${post?.author?.username && post?.author?.username?.replace(/ /g, '-')}/`,
+                                        pathname: `/a/${post?.author?.username}`,
                                     }}
-                                    state={{ id: post?.author?._id }}
                                 >
                                     <Text
                                         size='xs'
@@ -70,9 +68,8 @@ const CardPost = ({ post }) => {
                         </Stack>
                         <Link
                             to={{
-                                pathname: `/p/${post?.author?.username && post?.author?.username?.replace(/ /g, '-')}/${post?.title && post?.title.replace(/ /g, '-')}`,
+                                pathname: `/p/${post?.author?.username}/${post?.slug}`,
                             }}
-                            state={{ id: post?._id }}
                         >
                             <Heading size={{ base: 'lg', lg: 'xl' }} textAlign={'justify'} cursor={'pointer'} _hover={{ color: "purple.600" }}>
                                 {post?.title}

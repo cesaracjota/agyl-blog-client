@@ -47,19 +47,33 @@ const CreatePost = () => {
 
     const config = {
         theme: themeBG,
+        language: 'es',
+        toolbar: true,
+        toolbarSticky: true,
         placeholder: '',
-        toolbarButtonSize: 'large',
-        statusbar: false,
-        break: false,
-        style: {
-            height: 'auto',
+        editor: {
+            maxHeight: '100%',
             width: '100%',
             color: useColorModeValue('black', 'white')
         },
-        buttons: 'bold,italic,underline,|,ul,ol,|,outdent,indent,|,font,fontsize,brush,paragraph,|,image,video,table,link,|,align,undo,redo,hr,symbol,fullsize,selectall,source, preview, paste, select',
-        uploader: {
-            insertImageAsBase64URI: false,
-        }
+        readonly: false,
+        toolbarButtonSize: 'md',
+        statusbar: true,
+        break: true,
+        style: {
+            height: '100%',
+            width: '100%',
+            color: useColorModeValue('black', 'white')
+        },
+
+        toolbarAdaptive: true,
+
+        // uploader: {
+        //     insertImageAsBase64URI: false,
+        //     IntersectionObserverEntry: true,
+        // },
+
+        // upload image 
     }
 
     const initialValues = {
@@ -238,7 +252,7 @@ const CreatePost = () => {
                             />
                         </Stack>
 
-                        <Stack direction={'column'}>
+                        <Stack direction={'column'} bg={'black'}>
                             <JoditEditor
                                 ref={editor}
                                 value={indice?.description}

@@ -21,7 +21,7 @@ import {
 } from '@chakra-ui/react';
 import { FiLink, FiUserPlus } from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { RiArticleFill, RiChat1Fill } from 'react-icons/ri';
 import { FaBirthdayCake, FaMapMarkerAlt } from 'react-icons/fa';
 import { FiMoreHorizontal } from 'react-icons/fi';
@@ -29,6 +29,7 @@ import Moment from 'moment';
 import { getUser, reset } from '../../features/userSlice';
 import { SpinnerComponent } from '../../helpers/spinner';
 import { ToastChakra } from '../../helpers/toast';
+import { lightenDarkenColor } from '../../helpers/settingColor';
 
 const DetailUser = ({ location }) => {
 
@@ -40,11 +41,11 @@ const DetailUser = ({ location }) => {
 
     const [user_detail, setUserDetail] = useState([]);
 
-    const params = useLocation(location);
+    const params = useParams(location);
 
     useEffect(() => {
 
-        dispatch(getUser(params?.state?.id)).then((user) =>{
+        dispatch(getUser(params?.username)).then((user) =>{
             setUserDetail(user.payload);
         })
 
@@ -52,7 +53,7 @@ const DetailUser = ({ location }) => {
             dispatch(reset());
         }
 
-    }, [navigate, dispatch, params?.state?.id]);
+    }, [navigate, dispatch, params?.username]);
 
     if (isError) {
         ToastChakra('Error', message, 'error', 1500);
@@ -61,45 +62,6 @@ const DetailUser = ({ location }) => {
 
     if (isLoading) {
         return <SpinnerComponent />
-    }
-
-    const lightenDarkenColor = (colorCode, amount) => {
-
-        let usePound = false;
-
-        if (colorCode[0] === "#") {
-            colorCode = colorCode.slice(1);
-            usePound = true;
-        }
-        const num = parseInt(colorCode, 16);
-        let r = (num >> 16) + amount;
-
-        if (r > 255) {
-            r = 255;
-        } else if (r < 0) {
-            r = 0;
-        }
-
-        let b = ((num >> 8) & 0x00FF) + amount;
-
-        if (b > 255) {
-            b = 255;
-        } else if (b < 0) {
-            b = 0;
-        }
-
-        let g = (num & 0x0000FF) + amount;
-
-        if (g > 255) {
-            g = 255;
-        } else if (g < 0) {
-            g = 0;
-        }
-        let color = (g | (b << 8) | (r << 16)).toString(16);
-        while (color.length < 6) {
-            color = 0 + color;
-        }
-        return (usePound ? '#' : '') + color;
     }
 
     const bgColorModified = lightenDarkenColor(`${user_detail?.brand_color}`, - 60);
@@ -273,9 +235,8 @@ const DetailUser = ({ location }) => {
 
                                                     <Link
                                                         to={{
-                                                            pathname: `/p/${user_detail?.username && user_detail?.username?.replace(/ /g, '-')}/${post?.title && post?.title.replace(/ /g, '-')}`,
+                                                            pathname: `/p/${user_detail?.username}/${post?.slug}`,
                                                         }}
-                                                        state={{ id: post?._id }}
                                                     >
                                                         <Heading pr={{ base: 0, lg: 10 }} size={{ base: 'sm', lg: 'md' }} textAlign={{ base: 'justify', lg: 'justify' }} cursor={'pointer'} _hover={{ color: "purple.600" }}>
                                                             {post?.title}

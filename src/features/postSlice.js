@@ -47,9 +47,9 @@ export const getPosts = createAsyncThunk(
 
 export const getPost = createAsyncThunk(
     "post/get",
-    async (id, thunkAPI) => {
+    async (slug, thunkAPI) => {
         try {
-            return await postService.GET(id);
+            return await postService.GET(slug);
         } catch (error) {
             const message = 
             (error.response && 

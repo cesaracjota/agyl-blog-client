@@ -8,8 +8,8 @@ const GETALL = async () => {
     return response.data;
 }
 
-const GET = async (id) => {
-    const response = await axios.get(`${API_URL}/users/${id}`);
+const GET = async (username) => {
+    const response = await axios.get(`${API_URL}/users/profile/info/${username}`);
     return response?.data?.data;
 }
 

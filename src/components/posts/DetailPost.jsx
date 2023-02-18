@@ -9,7 +9,7 @@ import {
     ModalHeader, ModalCloseButton, ModalBody, Flex, GridItem, Grid, CardHeader,
 } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useLocation, useNavigate, NavLink } from 'react-router-dom';
+import { Link, useNavigate, NavLink, useParams } from 'react-router-dom';
 import { ToastChakra } from '../../helpers/toast';
 import { getPost, reset } from '../../features/postSlice';
 import { SpinnerComponent } from '../../helpers/spinner';
@@ -22,6 +22,7 @@ import { createComment } from '../../features/commentSlice';
 import { getUser } from '../../features/userSlice';
 
 import Moment from 'moment';
+import { lightenDarkenColor } from '../../helpers/settingColor';
 
 const DetailPost = ({ location }) => {
 
@@ -35,7 +36,7 @@ const DetailPost = ({ location }) => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const params = useLocation(location);
+    const params = useParams(location);
 
     const bg = useColorModeValue('white', 'primary.900');
     const borderColor = useColorModeValue('gray.200', 'primary.700');
@@ -46,18 +47,18 @@ const DetailPost = ({ location }) => {
     useEffect(() => {
 
         if(user){
-            dispatch(getUser(user?.data?._id)).then((res)=> {
+            dispatch(getUser(user?.data?.username)).then((res)=> {
                 setUserDetail(res.payload);
             })
         }
 
-        dispatch(getPost(params?.state?.id));
+        dispatch(getPost(params?.slug));
 
         return () => {
             dispatch(reset())
         }
 
-    }, [user, navigate, dispatch, params?.state?.id, user?.data?._id]);
+    }, [user, navigate, dispatch, params?.slug, user?.data?._id]);
 
     if (isError) {
         ToastChakra('Error', message, 'error', 1000);
@@ -83,7 +84,7 @@ const DetailPost = ({ location }) => {
             dispatch(createComment(data)).then(() => {
                 setIndice(initialValues);
                 setCargando(false);
-                dispatch(getPost(params?.state?.id));
+                dispatch(getPost(params?.slug));
             }).catch(err => {
                 console.error(err);
             })
@@ -92,45 +93,6 @@ const DetailPost = ({ location }) => {
 
     const handleModalClose = () => {
         setIsModalOpen(false);
-    }
-
-    const lightenDarkenColor = (colorCode, amount) => {
-
-        let usePound = false;
-
-        if (colorCode[0] === "#") {
-            colorCode = colorCode.slice(1);
-            usePound = true;
-        }
-        const num = parseInt(colorCode, 16);
-        let r = (num >> 16) + amount;
-
-        if (r > 255) {
-            r = 255;
-        } else if (r < 0) {
-            r = 0;
-        }
-
-        let b = ((num >> 8) & 0x00FF) + amount;
-
-        if (b > 255) {
-            b = 255;
-        } else if (b < 0) {
-            b = 0;
-        }
-
-        let g = (num & 0x0000FF) + amount;
-
-        if (g > 255) {
-            g = 255;
-        } else if (g < 0) {
-            g = 0;
-        }
-        let color = (g | (b << 8) | (r << 16)).toString(16);
-        while (color.length < 6) {
-            color = 0 + color;
-        }
-        return (usePound ? '#' : '') + color;
     }
 
     const bgColorModified = lightenDarkenColor(`${post?.author?.brand_color}`, - 100);
@@ -187,9 +149,8 @@ const DetailPost = ({ location }) => {
                                     <Stack spacing={4} direction={'row'} mb={2}>
                                         <Link
                                             to={{
-                                                pathname: `/a/${post?.author?.username && post?.author?.username?.replace(/ /g, '-')}/`,
+                                                pathname: `/a/${post?.author?.username}/`,
                                             }}
-                                            state={{ id: post?.author?._id }}
                                         >
                                             <Avatar
                                                 borderWidth={'3px'}
@@ -202,9 +163,8 @@ const DetailPost = ({ location }) => {
                                         <Stack spacing={0} direction="column" alignSelf={'center'}>
                                             <Link
                                                 to={{
-                                                    pathname: `/a/${post?.author?.name && post?.author?.name?.replace(/ /g, '-')}/`,
+                                                    pathname: `/a/${post?.author?.username}/`,
                                                 }}
-                                                state={{ id: post?.author?._id }}
                                             >
                                                 <Text
                                                     size='sm'
@@ -317,14 +277,13 @@ const DetailPost = ({ location }) => {
 
                                     <Stack direction={'column'} justifyContent={'stretch'} spacing={4} mt={4}>
                                         {
-                                            post?.comments.map((comment, index) => (
+                                            post?.comments?.map((comment, index) => (
                                                 <Stack spacing={1} direction={'column'} key={index} w={'full'}>
                                                     <Stack spacing={2} direction={'row'}>
                                                         <Link
                                                             to={{
-                                                                pathname: `/a/${comment?.user?.username && comment?.user?.username?.replace(/ /g, '-')}/`,
+                                                                pathname: `/a/${comment?.user?.username}/`,
                                                             }}
-                                                            state={{ id: comment?.user?._id }}
                                                         >
                                                             <Avatar
                                                                 borderWidth={'1px'}
@@ -341,9 +300,8 @@ const DetailPost = ({ location }) => {
                                                                         <Stack direction={'row'} justifyContent={'flex-start'} alignItems={'center'} spacing={1}>
                                                                             <Link
                                                                                 to={{
-                                                                                    pathname: `/a/${comment?.user?.username && comment?.user?.username?.replace(/ /g, '-')}/`,
+                                                                                    pathname: `/a/${comment?.user?.username}/`,
                                                                                 }}
-                                                                                state={{ id: comment?.user?._id }}
                                                                             >
                                                                                 <Text
                                                                                     fontSize={'sm'}
@@ -464,9 +422,8 @@ const DetailPost = ({ location }) => {
                                                     <Box>
                                                         <Link
                                                             to={{
-                                                                pathname: `/p/${post?.author?.username && post?.author?.username?.replace(/ /g, '-')}/${post?.title && post?.title.replace(/ /g, '-')}`,
+                                                                pathname: `/p/${post?.author?.username}/${post_item?.slug}`,
                                                             }}
-                                                            state={{ id: post?._id }}
                                                         >
                                                             <Heading pr={{ base: 0, lg: 10 }} size={'sm'} textAlign={{ base: 'center', lg: 'justify' }} cursor={'pointer'} _hover={{ color: "purple.600" }}>
                                                                 {post_item?.title}

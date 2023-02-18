@@ -21,8 +21,8 @@ export default function AppRouter() {
                 <Route path="new-user" element={<SignupPage />} />
             </Route>
             <Route path="/*" element={<HomePage />}/>
-            <Route path="/p/:author/:title" element={<DetailPostPage />} exact />
-            <Route path="/a/:author" element={<UserDetailPage />} />
+            <Route path="/p/:username/:slug" element={<DetailPostPage />} exact />
+            <Route path="/a/:username" element={<UserDetailPage />} />
             <Route path="/profile/settings/profile" element={<ProfilePage />} />
             <Route path="*" element={<h1>404: Not Found</h1>} />
         </Routes>
